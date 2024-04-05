@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: resources.null.template.upbound.io
+  name: recordsets.a.dns.crossplane.io
 spec:
-  group: null.template.upbound.io
+  group: a.dns.crossplane.io
   names:
     categories:
     - crossplane
     - managed
-    - template
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    - dns
+    kind: RecordSet
+    listKind: RecordSetList
+    plural: recordsets
+    singular: recordset
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,10 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API. The null_resource
-          resource implements the standard resource lifecycle but takes no further
-          action. The triggers argument allows specifying an arbitrary set of values
-          that, when changed, will cause the resource to be replaced.
+        description: RecordSet is the Schema for the RecordSets API. Creates an A
+          type DNS record set.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -52,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: RecordSetSpec defines the desired state of RecordSet
             properties:
               deletionPolicy:
                 default: Delete
@@ -69,13 +67,25 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  triggers:
-                    additionalProperties:
+                  addresses:
+                    description: (Set of String) The IPv4 addresses this record set
+                      will point to. The IPv4 addresses this record set will point
+                      to.
+                    items:
                       type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
+                    type: array
+                  ttl:
+                    description: (Number) The TTL of the record set. Defaults to 3600.
+                      The TTL of the record set. Defaults to `3600`.
+                    type: number
+                  zone:
+                    description: (String) DNS zone the record set belongs to. It must
+                      be an FQDN, that is, include the trailing dot. DNS zone the
+                      record set belongs to. It must be an FQDN, that is, include
+                      the trailing dot.
+                    type: string
+                required:
+                - zone
                 type: object
               initProvider:
                 description: THIS IS A BETA FIELD. It will be honored unless the Management
@@ -89,13 +99,17 @@ spec:
                   for example because of an external controller is managing them,
                   like an autoscaler.
                 properties:
-                  triggers:
-                    additionalProperties:
+                  addresses:
+                    description: (Set of String) The IPv4 addresses this record set
+                      will point to. The IPv4 addresses this record set will point
+                      to.
+                    items:
                       type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
+                    type: array
+                  ttl:
+                    description: (Number) The TTL of the record set. Defaults to 3600.
+                      The TTL of the record set. Defaults to `3600`.
+                    type: number
                 type: object
               managementPolicies:
                 default:
@@ -257,20 +271,36 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.addresses is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.addresses)
+                || (has(self.initProvider) && has(self.initProvider.addresses))'
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: RecordSetStatus defines the observed state of RecordSet.
             properties:
               atProvider:
                 properties:
-                  id:
-                    type: string
-                  triggers:
-                    additionalProperties:
+                  addresses:
+                    description: (Set of String) The IPv4 addresses this record set
+                      will point to. The IPv4 addresses this record set will point
+                      to.
+                    items:
                       type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
+                    type: array
+                  id:
+                    description: (String) The ID of this resource.
+                    type: string
+                  ttl:
+                    description: (Number) The TTL of the record set. Defaults to 3600.
+                      The TTL of the record set. Defaults to `3600`.
+                    type: number
+                  zone:
+                    description: (String) DNS zone the record set belongs to. It must
+                      be an FQDN, that is, include the trailing dot. DNS zone the
+                      record set belongs to. It must be an FQDN, that is, include
+                      the trailing dot.
+                    type: string
                 type: object
               conditions:
                 description: Conditions of the resource.

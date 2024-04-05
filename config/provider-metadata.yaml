@@ -1,36 +1,261 @@
-name: hashicorp/null
+name: hashicorp/dns
 resources:
-    null_resource:
+    dns_a_record_set:
         subCategory: ""
-        description: The null_resource resource implements the standard resource lifecycle but takes no further action. The triggers argument allows specifying an arbitrary set of values that, when changed, will cause the resource to be replaced.
-        name: null_resource
-        title: null_resource Resource - terraform-provider-null
+        description: Creates an A type DNS record set.
+        name: dns_a_record_set
+        title: dns_a_record_set Resource - terraform-provider-dns
         examples:
-            - name: cluster
+            - name: www
               manifest: |-
                 {
-                  "connection": [
+                  "addresses": [
+                    "192.168.0.1",
+                    "192.168.0.2",
+                    "192.168.0.3"
+                  ],
+                  "name": "www",
+                  "ttl": 300,
+                  "zone": "example.com."
+                }
+        argumentDocs:
+            addresses: (Set of String) The IPv4 addresses this record set will point to.
+            id: (String) The ID of this resource.
+            name: (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+            ttl: (Number) The TTL of the record set. Defaults to 3600.
+            zone: (String) DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
+        importStatements:
+            - |-
+              # Import using the FQDN.
+              terraform import dns_a_record_set.www www.example.com.
+    dns_aaaa_record_set:
+        subCategory: ""
+        description: Creates an AAAA type DNS record set.
+        name: dns_aaaa_record_set
+        title: dns_aaaa_record_set Resource - terraform-provider-dns
+        examples:
+            - name: www
+              manifest: |-
+                {
+                  "addresses": [
+                    "fdd5:e282:43b8:5303:dead:beef:cafe:babe",
+                    "fdd5:e282:43b8:5303:cafe:babe:dead:beef"
+                  ],
+                  "name": "www",
+                  "ttl": 300,
+                  "zone": "example.com."
+                }
+        argumentDocs:
+            addresses: (Set of String) The IPv6 addresses this record set will point to.
+            id: (String) The ID of this resource.
+            name: (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+            ttl: (Number) The TTL of the record set. Defaults to 3600.
+            zone: (String) DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
+        importStatements:
+            - |-
+              # Import using the FQDN.
+              terraform import dns_aaaa_record_set.www www.example.com.
+    dns_cname_record:
+        subCategory: ""
+        description: Creates a CNAME type DNS record.
+        name: dns_cname_record
+        title: dns_cname_record Resource - terraform-provider-dns
+        examples:
+            - name: foo
+              manifest: |-
+                {
+                  "cname": "bar.example.com.",
+                  "name": "foo",
+                  "ttl": 300,
+                  "zone": "example.com."
+                }
+        argumentDocs:
+            cname: (String) The canonical name this record will point to.
+            id: (String) Always set to the fully qualified domain name of the record.
+            name: (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+            ttl: (Number) The TTL of the record set. Defaults to 3600.
+            zone: (String) DNS zone the record belongs to. It must be an FQDN, that is, include the trailing dot.
+        importStatements:
+            - |-
+              # Import using the FQDN.
+              terraform import dns_cname_record.foo foo.example.com.
+    dns_mx_record_set:
+        subCategory: ""
+        description: Creates an MX type DNS record set.
+        name: dns_mx_record_set
+        title: dns_mx_record_set Resource - terraform-provider-dns
+        examples:
+            - name: mx
+              manifest: |-
+                {
+                  "depends_on": [
+                    "dns_a_record_set.smtp",
+                    "dns_a_record_set.backup"
+                  ],
+                  "mx": [
                     {
-                      "host": "${element(aws_instance.cluster.*.public_ip, 0)}"
+                      "exchange": "smtp.example.com.",
+                      "preference": 10
+                    },
+                    {
+                      "exchange": "backup.example.com.",
+                      "preference": 20
                     }
                   ],
-                  "provisioner": {
-                    "remote-exec": [
-                      {
-                        "inline": [
-                          "bootstrap-cluster.sh ${join(\" \", aws_instance.cluster.*.private_ip)}"
-                        ]
-                      }
-                    ]
-                  },
-                  "triggers": {
-                    "cluster_instance_ids": "${join(\",\", aws_instance.cluster.*.id)}"
-                  }
+                  "ttl": 300,
+                  "zone": "example.com."
                 }
               dependencies:
-                aws_instance.cluster: |-
+                dns_a_record_set.backup: |-
                     {
-                      "count": 3
+                      "addresses": [
+                        "192.0.2.2"
+                      ],
+                      "name": "backup",
+                      "ttl": 300,
+                      "zone": "example.com."
                     }
-        argumentDocs: {}
-        importStatements: []
+                dns_a_record_set.smtp: |-
+                    {
+                      "addresses": [
+                        "192.0.2.1"
+                      ],
+                      "name": "smtp",
+                      "ttl": 300,
+                      "zone": "example.com."
+                    }
+        argumentDocs:
+            exchange: (String) The FQDN of the mail exchange, include the trailing dot.
+            id: (String) Always set to the fully qualified domain name of the record set
+            mx: (Block Set) Can be specified multiple times for each MX record. (see below for nested schema)
+            name: (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+            preference: (Number) The preference for the record.
+            ttl: (Number) The TTL of the record set. Defaults to 3600.
+            zone: (String) DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
+        importStatements:
+            - |-
+              # Import using the FQDN.
+              terraform import dns_mx_record_set.mx example.com.
+    dns_ns_record_set:
+        subCategory: ""
+        description: Creates an NS type DNS record set.
+        name: dns_ns_record_set
+        title: dns_ns_record_set Resource - terraform-provider-dns
+        examples:
+            - name: www
+              manifest: |-
+                {
+                  "name": "www",
+                  "nameservers": [
+                    "a.iana-servers.net.",
+                    "b.iana-servers.net."
+                  ],
+                  "ttl": 300,
+                  "zone": "example.com."
+                }
+        argumentDocs:
+            id: (String) Always set to the fully qualified domain name of the record set.
+            name: (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+            nameservers: (Set of String) The nameservers this record set will point to.
+            ttl: (Number) The TTL of the record set. Defaults to 3600.
+            zone: (String) DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
+        importStatements:
+            - |-
+              # Import using the FQDN.
+              terraform import dns_ns_record_set.www www.example.com.
+    dns_ptr_record:
+        subCategory: ""
+        description: Creates a PTR type DNS record.
+        name: dns_ptr_record
+        title: dns_ptr_record Resource - terraform-provider-dns
+        examples:
+            - name: dns-sd
+              manifest: |-
+                {
+                  "name": "r._dns-sd",
+                  "ptr": "example.com.",
+                  "ttl": 300,
+                  "zone": "example.com."
+                }
+        argumentDocs:
+            id: (String) Always set to the fully qualified domain name of the record.
+            name: (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+            ptr: (String) The canonical name this record will point to.
+            ttl: (Number) The TTL of the record. Defaults to 3600.
+            zone: (String) DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
+        importStatements:
+            - |-
+              # Import using the FQDN.
+              terraform import dns_ptr_record.dns-sd r._dns-sd.example.com.
+    dns_srv_record_set:
+        subCategory: ""
+        description: Creates an SRV type DNS record set.
+        name: dns_srv_record_set
+        title: dns_srv_record_set Resource - terraform-provider-dns
+        examples:
+            - name: sip
+              manifest: |-
+                {
+                  "name": "_sip._tcp",
+                  "srv": [
+                    {
+                      "port": 5060,
+                      "priority": 10,
+                      "target": "bigbox.example.com.",
+                      "weight": 60
+                    },
+                    {
+                      "port": 5060,
+                      "priority": 10,
+                      "target": "smallbox1.example.com.",
+                      "weight": 20
+                    },
+                    {
+                      "port": 5060,
+                      "priority": 10,
+                      "target": "smallbox2.example.com.",
+                      "weight": 20
+                    }
+                  ],
+                  "ttl": 300,
+                  "zone": "example.com."
+                }
+        argumentDocs:
+            id: (String) Always set to the fully qualified domain name of the record set.
+            name: (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+            port: (Number) The port for the service on the target.
+            priority: (Number) The priority for the record.
+            srv: (Block Set) Can be specified multiple times for each SRV record. (see below for nested schema)
+            target: (String) The FQDN of the target, include the trailing dot.
+            ttl: (Number) The TTL of the record set. Defaults to 3600.
+            weight: (Number) The weight for the record.
+            zone: (String) DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
+        importStatements:
+            - |-
+              # Import using the FQDN.
+              terraform import dns_srv_record_set.sip _sip._tcp.example.com.
+    dns_txt_record_set:
+        subCategory: ""
+        description: Creates a TXT type DNS record set.
+        name: dns_txt_record_set
+        title: dns_txt_record_set Resource - terraform-provider-dns
+        examples:
+            - name: google
+              manifest: |-
+                {
+                  "ttl": 300,
+                  "txt": [
+                    "google-site-verification=..."
+                  ],
+                  "zone": "example.com."
+                }
+        argumentDocs:
+            id: (String) Always set to the fully qualified domain name of the record set.
+            name: (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+            ttl: (Number) The TTL of the record set. Defaults to 3600.
+            txt: (Set of String) The text records this record set will be set to.
+            zone: (String) DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
+        importStatements:
+            - |-
+              # Import using the FQDN.
+              terraform import dns_txt_record_set.example example.com.

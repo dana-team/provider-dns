@@ -7,7 +7,7 @@ package clients
 import (
 	"context"
 	"encoding/json"
-
+	"fmt"
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/types"
@@ -15,7 +15,7 @@ import (
 
 	"github.com/crossplane/upjet/pkg/terraform"
 
-	"github.com/upbound/upjet-provider-template/apis/v1beta1"
+	"github.com/dana-team/provider-dns/apis/v1beta1"
 )
 
 const (
@@ -24,7 +24,13 @@ const (
 	errGetProviderConfig    = "cannot get referenced ProviderConfig"
 	errTrackUsage           = "cannot track ProviderConfig usage"
 	errExtractCredentials   = "cannot extract credentials"
-	errUnmarshalCredentials = "cannot unmarshal template credentials as JSON"
+	errUnmarshalCredentials = "cannot unmarshal dns credentials as JSON"
+	server                  = "server"
+	realm                   = "realm"
+	username                = "username"
+	password                = "password"
+	gssapi                  = "gssapi"
+	update                  = "update"
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -63,10 +69,19 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		}
 
 		// Set credentials in Terraform provider configuration.
-		/*ps.Configuration = map[string]any{
-			"username": creds["username"],
-			"password": creds["password"],
-		}*/
+		ps.Configuration = map[string]interface{}{
+			update: map[string]interface{}{
+				server: creds[server],
+				gssapi: map[string]string{
+					realm:    creds[realm],
+					username: creds[username],
+					password: creds[password],
+				},
+			},
+		}
+
+		fmt.Println(ps.Configuration)
+
 		return ps, nil
 	}
 }
