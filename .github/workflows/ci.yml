@@ -9,8 +9,6 @@ on:
   workflow_dispatch: {}
 
 env:
-  # Common versions
-  GOLANGCI_VERSION: 'v1.50.0'
   DOCKER_BUILDX_VERSION: 'v0.8.2'
 
   # Common users. We can't run a step 'if secrets.XXX != ""' but we can run a
@@ -99,9 +97,10 @@ jobs:
       # We could run 'make lint' but we prefer this action because it leaves
       # 'annotations' (i.e. it comments on PRs to point out linter violations).
       - name: Lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v4
         with:
-          version: ${{ env.GOLANGCI_VERSION }}
+          version: latest
+          args: --timeout=2m
 
   check-diff:
     runs-on: ubuntu-22.04
