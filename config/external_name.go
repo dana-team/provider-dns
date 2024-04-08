@@ -9,9 +9,14 @@ import "github.com/crossplane/upjet/pkg/config"
 // ExternalNameConfigs contains all external name configurations for this
 // provider.
 var ExternalNameConfigs = map[string]config.ExternalName{
-	// The import ID consists of several parameters. We'll use branch name as
-	// the external name.
-	"dns_a_record_set": config.TemplatedStringAsIdentifier("name", "{{ .external_name }}.{{ .parameters.zone }}"),
+	"dns_a_record_set":    config.TemplatedStringAsIdentifier("name", "{{ .external_name }}.{{ .parameters.zone }}"),
+	"dns_aaaa_record_set": config.TemplatedStringAsIdentifier("name", "{{ .external_name }}.{{ .parameters.zone }}"),
+	"dns_cname_record":    config.TemplatedStringAsIdentifier("name", "{{ .external_name }}.{{ .parameters.zone }}"),
+	"dns_mx_record_set":   config.TemplatedStringAsIdentifier("name", "{{ .external_name }}.{{ .parameters.zone }}"),
+	"dns_ns_record_set":   config.TemplatedStringAsIdentifier("name", "{{ .external_name }}.{{ .parameters.zone }}"),
+	"dns_ptr_record":      config.TemplatedStringAsIdentifier("name", "{{ .external_name }}.{{ .parameters.zone }}"),
+	"dns_srv_record_set":  config.TemplatedStringAsIdentifier("name", "{{ .external_name }}.{{ .parameters.zone }}"),
+	"dns_txt_record_set":  config.TemplatedStringAsIdentifier("name", "{{ .external_name }}.{{ .parameters.zone }}"),
 }
 
 // ExternalNameConfigurations applies all external name configs listed in the

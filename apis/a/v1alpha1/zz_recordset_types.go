@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 /*
 Copyright 2022 Upbound Inc.
 */
@@ -21,6 +17,7 @@ type RecordSetInitParameters struct {
 
 	// (Set of String) The IPv4 addresses this record set will point to.
 	// The IPv4 addresses this record set will point to.
+	// +listType=set
 	Addresses []*string `json:"addresses,omitempty" tf:"addresses,omitempty"`
 
 	// (Number) The TTL of the record set. Defaults to 3600.
@@ -32,6 +29,7 @@ type RecordSetObservation struct {
 
 	// (Set of String) The IPv4 addresses this record set will point to.
 	// The IPv4 addresses this record set will point to.
+	// +listType=set
 	Addresses []*string `json:"addresses,omitempty" tf:"addresses,omitempty"`
 
 	// (String) The ID of this resource.
@@ -51,6 +49,7 @@ type RecordSetParameters struct {
 	// (Set of String) The IPv4 addresses this record set will point to.
 	// The IPv4 addresses this record set will point to.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	Addresses []*string `json:"addresses,omitempty" tf:"addresses,omitempty"`
 
 	// (Number) The TTL of the record set. Defaults to 3600.
@@ -88,13 +87,14 @@ type RecordSetStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // RecordSet is the Schema for the RecordSets API. Creates an A type DNS record set.
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,dns}
 type RecordSet struct {
 	metav1.TypeMeta   `json:",inline"`

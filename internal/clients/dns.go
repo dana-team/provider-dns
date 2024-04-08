@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/types"
@@ -25,12 +26,29 @@ const (
 	errTrackUsage           = "cannot track ProviderConfig usage"
 	errExtractCredentials   = "cannot extract credentials"
 	errUnmarshalCredentials = "cannot unmarshal dns credentials as JSON"
-	server                  = "server"
-	realm                   = "realm"
-	username                = "username"
-	password                = "password"
-	gssapi                  = "gssapi"
-	update                  = "update"
+
+	// general parameters
+	keyRFC    = "rfc"
+	keyServer = "server"
+	update    = "update"
+
+	// gss-tsig (RFC 3645) parameters
+	gsstsigRFC  = "3645"
+	gssapi      = "gssapi"
+	keyTab      = "keytab"
+	keyPassword = "password"
+	keyRealm    = "realm"
+	keyUsername = "username"
+
+	// secret key based transaction authentication (RFC 2845) parameters
+	keyBasedTransactionRFC  = "2845"
+	transactionKeyAlgorithm = "key_algorithm"
+	transcationKeyName      = "key_name"
+	transactionKeySecret    = "key_secret"
+	keyPort                 = "port"
+	keyRetries              = "retries"
+	keyTimeout              = "timeout"
+	keyTransport            = "transport"
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -69,19 +87,106 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		}
 
 		// Set credentials in Terraform provider configuration.
+		authConfig := buildAuthConfig(creds)
 		ps.Configuration = map[string]interface{}{
-			update: map[string]interface{}{
-				server: creds[server],
-				gssapi: map[string]string{
-					realm:    creds[realm],
-					username: creds[username],
-					password: creds[password],
-				},
-			},
+			update: authConfig,
 		}
 
 		fmt.Println(ps.Configuration)
 
 		return ps, nil
 	}
+}
+
+// buildAuthConfig builds the auth configuration for the provider.
+func buildAuthConfig(creds map[string]string) map[string]any {
+	authConfig := map[string]any{}
+
+	if server, ok := creds[keyServer]; ok {
+		authConfig[keyServer] = server
+	}
+
+	if rfc, ok := creds[keyRFC]; ok {
+		if rfc == gsstsigRFC {
+			authConfig[gssapi] = buildGSSTSIGAuthConfig(creds)
+		} else if rfc == keyBasedTransactionRFC {
+			secredBasedTransactionAuthConfig := buildSecretBasedTransactionAuthConfig(creds)
+			for k, v := range secredBasedTransactionAuthConfig {
+				authConfig[k] = v
+			}
+		}
+	}
+
+	optionalConfig := buildOptionalConfig(creds)
+	for k, v := range optionalConfig {
+		authConfig[k] = v
+	}
+
+	return authConfig
+
+}
+
+// buildGSSTSIGAuthConfig builds the configuration for GSS-TSIG authentication (RFC 3645).
+func buildGSSTSIGAuthConfig(creds map[string]string) map[string]string {
+	config := make(map[string]string)
+
+	if realm, ok := creds[keyRealm]; ok {
+		config[keyRealm] = realm
+	}
+
+	if username, ok := creds[keyUsername]; ok {
+		config[keyUsername] = username
+	}
+
+	if password, ok := creds[keyPassword]; ok {
+		config[keyPassword] = password
+	}
+
+	if keytab, ok := creds[keyTab]; ok {
+		config[keyTab] = keytab
+	}
+
+	return config
+}
+
+// // buildGSSTSIGAuthConfig builds the configuration for GSS-TSIG authentication (RFC 2845).
+func buildSecretBasedTransactionAuthConfig(creds map[string]string) map[string]string {
+	config := make(map[string]string)
+
+	if keyName, ok := creds[transcationKeyName]; ok {
+		config[transcationKeyName] = keyName
+	}
+
+	if keyAlgorithm, ok := creds[transactionKeyAlgorithm]; ok {
+		config[transactionKeyAlgorithm] = keyAlgorithm
+	}
+
+	if keySecret, ok := creds[transactionKeySecret]; ok {
+		config[transactionKeyAlgorithm] = keySecret
+	}
+
+	return config
+}
+
+// buildOptionalConfig builds the optional configuration for the provider.
+func buildOptionalConfig(creds map[string]string) map[string]string {
+	config := make(map[string]string)
+
+	if port, ok := creds[keyPort]; ok {
+		config[keyPort] = port
+	}
+
+	if retries, ok := creds[keyRetries]; ok {
+		config[keyRetries] = retries
+	}
+
+	if timeout, ok := creds[keyTimeout]; ok {
+		config[keyTimeout] = timeout
+	}
+
+	if transport, ok := creds[keyTransport]; ok {
+		config[keyTransport] = transport
+	}
+
+	return config
 }

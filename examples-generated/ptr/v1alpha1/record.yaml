@@ -1,0 +1,13 @@
+apiVersion: ptr.dns.crossplane.io/v1alpha1
+kind: Record
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ptr/v1alpha1/record
+  labels:
+    testing.upbound.io/example-name: dns-sd
+  name: dns-sd
+spec:
+  forProvider:
+    ptr: example.com.
+    ttl: 300
+    zone: example.com.

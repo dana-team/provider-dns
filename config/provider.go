@@ -7,8 +7,16 @@ package config
 import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
+
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 	"github.com/dana-team/provider-dns/config/a"
+	"github.com/dana-team/provider-dns/config/aaaa"
+	"github.com/dana-team/provider-dns/config/cname"
+	"github.com/dana-team/provider-dns/config/mx"
+	"github.com/dana-team/provider-dns/config/ns"
+	"github.com/dana-team/provider-dns/config/ptr"
+	"github.com/dana-team/provider-dns/config/srv"
+	"github.com/dana-team/provider-dns/config/txt"
 )
 
 const (
@@ -35,6 +43,13 @@ func GetProvider() *ujconfig.Provider {
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
 		a.Configure,
+		aaaa.Configure,
+		cname.Configure,
+		mx.Configure,
+		ns.Configure,
+		ptr.Configure,
+		srv.Configure,
+		txt.Configure,
 	} {
 		configure(pc)
 	}

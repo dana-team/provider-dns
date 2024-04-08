@@ -1,0 +1,11 @@
+apiVersion: cname.dns.crossplane.io/v1alpha1
+kind: Record
+metadata:
+  name: crossplane-cname
+spec:
+  forProvider:
+    cname: hello-crossplane.crossplane.dana-dev.com.
+    ttl: 3600
+    zone: crossplane.dana-dev.com.
+  providerConfigRef:
+    name: default
