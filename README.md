@@ -23,16 +23,29 @@ metadata:
   name: provider-dns
 spec:
   package: quay.io/danateamorg/provider-dns:v0.1.0
-  controllerConfigRef:
-    name: debug-config
----
-apiVersion: pkg.crossplane.io/v1alpha1
-kind: ControllerConfig
+  runtimeConfigRef:
+    apiVersion: pkg.crossplane.io/v1beta1
+    kind: DeploymentRuntimeConfig
+    name: config
+```
+
+```yaml
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
 metadata:
-  name: debug-config
+  name: config
 spec:
-  args:
-    - --debug
+  deploymentTemplate:
+    spec:
+      selector:
+        matchLabels:
+          pkg.crossplane.io/provider: provider-dns
+      template:
+        spec:
+          containers:
+            - args:
+                - --debug
+              name: package-runtime
 ```
 
 ## Configuration
