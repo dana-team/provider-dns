@@ -10,10 +10,6 @@ DNS API.
 Install the provider on your cluster:
 
 ```bash
-$  quay.io/danateamorg/provider-dns:v0.1.0
-```
-
-```bash
 $ up ctp provider install quay.io/danateamorg/provider-dns:v0.1.0
 ```
 
