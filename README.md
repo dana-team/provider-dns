@@ -16,7 +16,6 @@ $ up ctp provider install quay.io/danateamorg/provider-dns:v0.1.0
 Alternatively, you can use declarative installation:
 
 ```yaml
----
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
