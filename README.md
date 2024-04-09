@@ -10,6 +10,10 @@ DNS API.
 Install the provider on your cluster:
 
 ```bash
+$  quay.io/danateamorg/provider-dns:v0.1.0
+```
+
+```bash
 $ up ctp provider install quay.io/danateamorg/provider-dns:v0.1.0
 ```
 
@@ -86,9 +90,16 @@ spec:
 
 ## Resources
 
+Install the CRDs:
+
+```bash
+$ make generate
+$ kubectl apply -f package/crds
+```
+
 The following table summarizes the available resources:
 
-| Name            | apiversion                               | namespaced | kind          |
+| Name            | apiVersion                               | Namespaced | Kind          |
 |-----------------|------------------------------------------|------------|---------------|
 | ptrs            | record.dns.crossplane.io/v1alpha1       | false      | PTR           |
 | aaaarecordsets  | recordset.dns.crossplane.io/v1alpha1    | false      | AAAARecordSet |
