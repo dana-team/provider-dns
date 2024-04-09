@@ -7,8 +7,6 @@ package clients
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/types"
@@ -91,8 +89,6 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		ps.Configuration = map[string]interface{}{
 			update: authConfig,
 		}
-
-		fmt.Println(ps.Configuration)
 
 		return ps, nil
 	}
