@@ -1,0 +1,51 @@
+apiVersion: recordset.dns.crossplane.io/v1alpha1
+kind: MXRecordSet
+metadata:
+  annotations:
+    meta.upbound.io/example-id: recordset/v1alpha1/mxrecordset
+  labels:
+    testing.upbound.io/example-name: mx
+  name: mx
+spec:
+  forProvider:
+    mx:
+    - exchange: smtp.example.com.
+      preference: 10
+    - exchange: backup.example.com.
+      preference: 20
+    ttl: 300
+    zone: example.com.
+
+---
+
+apiVersion: recordset.dns.crossplane.io/v1alpha1
+kind: ARecordSet
+metadata:
+  annotations:
+    meta.upbound.io/example-id: recordset/v1alpha1/mxrecordset
+  labels:
+    testing.upbound.io/example-name: backup
+  name: backup
+spec:
+  forProvider:
+    addresses:
+    - 192.0.2.2
+    ttl: 300
+    zone: example.com.
+
+---
+
+apiVersion: recordset.dns.crossplane.io/v1alpha1
+kind: ARecordSet
+metadata:
+  annotations:
+    meta.upbound.io/example-id: recordset/v1alpha1/mxrecordset
+  labels:
+    testing.upbound.io/example-name: smtp
+  name: smtp
+spec:
+  forProvider:
+    addresses:
+    - 192.0.2.1
+    ttl: 300
+    zone: example.com.

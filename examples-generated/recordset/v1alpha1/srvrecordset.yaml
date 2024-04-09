@@ -1,0 +1,25 @@
+apiVersion: recordset.dns.crossplane.io/v1alpha1
+kind: SRVRecordSet
+metadata:
+  annotations:
+    meta.upbound.io/example-id: recordset/v1alpha1/srvrecordset
+  labels:
+    testing.upbound.io/example-name: sip
+  name: sip
+spec:
+  forProvider:
+    srv:
+    - port: 5060
+      priority: 10
+      target: bigbox.example.com.
+      weight: 60
+    - port: 5060
+      priority: 10
+      target: smallbox1.example.com.
+      weight: 20
+    - port: 5060
+      priority: 10
+      target: smallbox2.example.com.
+      weight: 20
+    ttl: 300
+    zone: example.com.

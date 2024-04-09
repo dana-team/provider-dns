@@ -1,0 +1,16 @@
+apiVersion: recordset.dns.crossplane.io/v1alpha1
+kind: ARecordSet
+metadata:
+  annotations:
+    meta.upbound.io/example-id: recordset/v1alpha1/arecordset
+  labels:
+    testing.upbound.io/example-name: www
+  name: www
+spec:
+  forProvider:
+    addresses:
+    - 192.168.0.1
+    - 192.168.0.2
+    - 192.168.0.3
+    ttl: 300
+    zone: example.com.

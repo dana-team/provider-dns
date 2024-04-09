@@ -1,0 +1,14 @@
+apiVersion: recordset.dns.crossplane.io/v1alpha1
+kind: TXTRecordSet
+metadata:
+  annotations:
+    meta.upbound.io/example-id: recordset/v1alpha1/txtrecordset
+  labels:
+    testing.upbound.io/example-name: google
+  name: google
+spec:
+  forProvider:
+    ttl: 300
+    txt:
+    - google-site-verification=...
+    zone: example.com.

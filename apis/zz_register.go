@@ -10,14 +10,9 @@ package apis
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/dana-team/provider-dns/apis/a/v1alpha1"
-	v1alpha1aaaa "github.com/dana-team/provider-dns/apis/aaaa/v1alpha1"
-	v1alpha1cname "github.com/dana-team/provider-dns/apis/cname/v1alpha1"
-	v1alpha1mx "github.com/dana-team/provider-dns/apis/mx/v1alpha1"
-	v1alpha1ns "github.com/dana-team/provider-dns/apis/ns/v1alpha1"
-	v1alpha1ptr "github.com/dana-team/provider-dns/apis/ptr/v1alpha1"
-	v1alpha1srv "github.com/dana-team/provider-dns/apis/srv/v1alpha1"
-	v1alpha1txt "github.com/dana-team/provider-dns/apis/txt/v1alpha1"
+	v1alpha1 "github.com/dana-team/provider-dns/apis/cname/v1alpha1"
+	v1alpha1record "github.com/dana-team/provider-dns/apis/record/v1alpha1"
+	v1alpha1recordset "github.com/dana-team/provider-dns/apis/recordset/v1alpha1"
 	v1alpha1apis "github.com/dana-team/provider-dns/apis/v1alpha1"
 	v1beta1 "github.com/dana-team/provider-dns/apis/v1beta1"
 )
@@ -26,13 +21,8 @@ func init() {
 	// Register the types with the Scheme so the components can map objects to GroupVersionKinds and back
 	AddToSchemes = append(AddToSchemes,
 		v1alpha1.SchemeBuilder.AddToScheme,
-		v1alpha1aaaa.SchemeBuilder.AddToScheme,
-		v1alpha1cname.SchemeBuilder.AddToScheme,
-		v1alpha1mx.SchemeBuilder.AddToScheme,
-		v1alpha1ns.SchemeBuilder.AddToScheme,
-		v1alpha1ptr.SchemeBuilder.AddToScheme,
-		v1alpha1srv.SchemeBuilder.AddToScheme,
-		v1alpha1txt.SchemeBuilder.AddToScheme,
+		v1alpha1record.SchemeBuilder.AddToScheme,
+		v1alpha1recordset.SchemeBuilder.AddToScheme,
 		v1alpha1apis.SchemeBuilder.AddToScheme,
 		v1beta1.SchemeBuilder.AddToScheme,
 	)
