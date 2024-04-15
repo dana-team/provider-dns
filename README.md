@@ -9,7 +9,7 @@ DNS API.
 
 ### Set Up
 
-First, create a `ConfigMap` which includes the content of the relevant `krb5.conf` file:
+First, create a `ConfigMap` which includes the content of the relevant `krb5.conf` file. This `ConfigMap` then needs to be mounted to the provider pod.
 
 ```bash
 $ kubectl create configmap krb5-config --from-file=krb5.conf=/etc/krb5.conf -n crossplane-system
