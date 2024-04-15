@@ -7,13 +7,50 @@ DNS API.
 
 ## Getting Started
 
-Install the provider on your cluster:
+### Set Up
+
+First, create a `ConfigMap` which includes the content of the relevant `krb5.conf` file:
 
 ```bash
-$ up ctp provider install quay.io/danateamorg/provider-dns:v0.1.0
+$ kubectl create configmap krb5-config --from-file=krb5.conf=/etc/krb5.conf -n crossplane-system
 ```
 
-Alternatively, you can use declarative installation:
+The `krb5.conf` file should look something like this:
+
+```ini
+# To opt out of the system crypto-policies configuration of krb5, remove the
+# symlink at /etc/krb5.conf.d/crypto-policies which will not be recreated.
+includedir /etc/krb5.conf.d/
+
+[logging]
+    default = FILE:/var/log/krb5libs.log
+    kdc = FILE:/var/log/krb5kdc.log
+    admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+    dns_lookup_realm = false
+    ticket_lifetime = 24h
+    renew_lifetime = 7d
+    forwardable = true
+    rdns = false
+    pkinit_anchors = FILE:/etc/pki/tls/certs/ca-bundle.crt
+    spake_preauth_groups = edwards25519
+    default_realm = DANA-DEV.COM
+    default_ccache_name = KEYRING:persistent:%{uid}
+
+[realms]
+ DANA-DEV.COM = {
+     kdc = dana-wdc-1.dana-dev.com
+     admin_server = dana-wdc-1.dana-dev.com
+     default_domain = dana-dev.com
+ }
+
+[domain_realm]
+ .dana-dev.com = DANA-DEV.COM
+ dana-dev.com = DANA-DEV.COM
+```
+
+### Intsall the provider
 
 ```yaml
 apiVersion: pkg.crossplane.io/v1
@@ -21,7 +58,7 @@ kind: Provider
 metadata:
   name: provider-dns
 spec:
-  package: quay.io/danateamorg/provider-dns:v0.1.0
+  package: quay.io/danateamorg/provider-dns:v0.1.1
   runtimeConfigRef:
     apiVersion: pkg.crossplane.io/v1beta1
     kind: DeploymentRuntimeConfig
@@ -42,9 +79,18 @@ spec:
       template:
         spec:
           containers:
-            - args:
-                - --debug
-              name: package-runtime
+          - args:
+            - --debug
+            name: package-runtime
+            volumeMounts:
+            - mountPath: /etc/krb5.conf
+              name: krb5-config
+              readOnly: true
+              subPath: krb5.conf
+          volumes:
+          - configMap:
+              name: krb5-config
+            name: krb5-config
 ```
 
 ## Configuration
@@ -63,7 +109,7 @@ type: Opaque
 stringData:
   credentials: |
     {
-      "rfc": "<3645|2845>",
+      "rfc": "3645",
       "server": "<DNS-SERVER-FQDN>",
       "realm": "<DOMAIN-NAME-IN-CAPS>,
       "username": "<DOMAIN-USER>",
@@ -109,7 +155,7 @@ spec:
 
 ## Resources
 
-Install the CRDs:
+To Install the CRDs manually, run:
 
 ```bash
 $ make generate
@@ -145,6 +191,27 @@ spec:
       - 10.1.30.3
     ttl: 3600
     zone: crossplane.dana-dev.com.
+    name: testy-test # actual name of the record
+  providerConfigRef:
+    name: default
+```
+
+In order to create a record in a subdomain, include the subdomain in the name:
+
+```yaml
+apiVersion: recordset.dns.crossplane.io/v1alpha1
+kind: ARecordSet
+metadata:
+  name: crossplane-test-sub
+spec:
+  forProvider:
+    addresses:
+      - 10.1.30.1
+      - 10.1.30.2
+      - 10.1.30.3
+    ttl: 3600
+    zone: crossplane.dana-dev.com.
+    name: testy-test.example-sub # record will be called testy-test in subdomain example-sub
   providerConfigRef:
     name: default
 ```
