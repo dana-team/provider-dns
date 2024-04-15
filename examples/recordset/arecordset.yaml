@@ -9,6 +9,7 @@ spec:
       - 10.1.30.2
       - 10.1.30.3
     ttl: 3600
+    name: test-record
     zone: crossplane.dana-dev.com.
   providerConfigRef:
     name: default

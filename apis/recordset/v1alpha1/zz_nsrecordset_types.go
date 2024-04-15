@@ -15,6 +15,10 @@ import (
 
 type NSRecordSetInitParameters struct {
 
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Set of String) The nameservers this record set will point to.
 	// The nameservers this record set will point to.
 	// +listType=set
@@ -29,6 +33,10 @@ type NSRecordSetObservation struct {
 
 	// (String) Always set to the fully qualified domain name of the record set.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Set of String) The nameservers this record set will point to.
 	// The nameservers this record set will point to.
@@ -45,6 +53,11 @@ type NSRecordSetObservation struct {
 }
 
 type NSRecordSetParameters struct {
+
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Set of String) The nameservers this record set will point to.
 	// The nameservers this record set will point to.
@@ -99,6 +112,7 @@ type NSRecordSetStatus struct {
 type NSRecordSet struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.nameservers) || (has(self.initProvider) && has(self.initProvider.nameservers))",message="spec.forProvider.nameservers is a required parameter"
 	Spec   NSRecordSetSpec   `json:"spec"`
 	Status NSRecordSetStatus `json:"status,omitempty"`

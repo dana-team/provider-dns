@@ -78,6 +78,11 @@ spec:
                       (String) The canonical name this record will point to.
                       The canonical name this record will point to.
                     type: string
+                  name:
+                    description: |-
+                      (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+                      The name of the record. The `zone` argument will be appended to this value to create the full record path.
+                    type: string
                   ttl:
                     description: |-
                       (Number) The TTL of the record set. Defaults to 3600.
@@ -108,6 +113,11 @@ spec:
                     description: |-
                       (String) The canonical name this record will point to.
                       The canonical name this record will point to.
+                    type: string
+                  name:
+                    description: |-
+                      (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+                      The name of the record. The `zone` argument will be appended to this value to create the full record path.
                     type: string
                   ttl:
                     description: |-
@@ -287,6 +297,10 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.cname)
                 || (has(self.initProvider) && has(self.initProvider.cname))'
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
           status:
             description: RecordStatus defines the observed state of Record.
             properties:
@@ -300,6 +314,11 @@ spec:
                   id:
                     description: (String) Always set to the fully qualified domain
                       name of the record.
+                    type: string
+                  name:
+                    description: |-
+                      (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+                      The name of the record. The `zone` argument will be appended to this value to create the full record path.
                     type: string
                   ttl:
                     description: |-

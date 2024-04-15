@@ -15,6 +15,10 @@ import (
 
 type TXTRecordSetInitParameters struct {
 
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
 	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
@@ -29,6 +33,10 @@ type TXTRecordSetObservation struct {
 
 	// (String) Always set to the fully qualified domain name of the record set.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
@@ -45,6 +53,11 @@ type TXTRecordSetObservation struct {
 }
 
 type TXTRecordSetParameters struct {
+
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.

@@ -8,6 +8,7 @@ metadata:
   name: sip
 spec:
   forProvider:
+    name: _sip._tcp
     srv:
     - port: 5060
       priority: 10

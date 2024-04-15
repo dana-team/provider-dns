@@ -73,6 +73,11 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  name:
+                    description: |-
+                      (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+                      The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+                    type: string
                   nameservers:
                     description: |-
                       (Set of String) The nameservers this record set will point to.
@@ -107,6 +112,11 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
+                  name:
+                    description: |-
+                      (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+                      The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+                    type: string
                   nameservers:
                     description: |-
                       (Set of String) The nameservers this record set will point to.
@@ -289,6 +299,10 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
             - message: spec.forProvider.nameservers is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.nameservers)
@@ -301,6 +315,11 @@ spec:
                   id:
                     description: (String) Always set to the fully qualified domain
                       name of the record set.
+                    type: string
+                  name:
+                    description: |-
+                      (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+                      The name of the record set. The `zone` argument will be appended to this value to create the full record path.
                     type: string
                   nameservers:
                     description: |-

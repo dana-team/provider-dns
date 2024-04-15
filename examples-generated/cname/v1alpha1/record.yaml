@@ -9,5 +9,6 @@ metadata:
 spec:
   forProvider:
     cname: bar.example.com.
+    name: foo
     ttl: 300
     zone: example.com.

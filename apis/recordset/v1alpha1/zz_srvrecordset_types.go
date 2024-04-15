@@ -15,6 +15,10 @@ import (
 
 type SRVRecordSetInitParameters struct {
 
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Block Set) Can be specified multiple times for each SRV record. (see below for nested schema)
 	// Can be specified multiple times for each SRV record.
 	Srv []SrvInitParameters `json:"srv,omitempty" tf:"srv,omitempty"`
@@ -28,6 +32,10 @@ type SRVRecordSetObservation struct {
 
 	// (String) Always set to the fully qualified domain name of the record set.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Block Set) Can be specified multiple times for each SRV record. (see below for nested schema)
 	// Can be specified multiple times for each SRV record.
@@ -43,6 +51,11 @@ type SRVRecordSetObservation struct {
 }
 
 type SRVRecordSetParameters struct {
+
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Block Set) Can be specified multiple times for each SRV record. (see below for nested schema)
 	// Can be specified multiple times for each SRV record.
@@ -157,8 +170,9 @@ type SRVRecordSetStatus struct {
 type SRVRecordSet struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              SRVRecordSetSpec   `json:"spec"`
-	Status            SRVRecordSetStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
+	Spec   SRVRecordSetSpec   `json:"spec"`
+	Status SRVRecordSetStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

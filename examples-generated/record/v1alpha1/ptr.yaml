@@ -8,6 +8,7 @@ metadata:
   name: dns-sd
 spec:
   forProvider:
+    name: r._dns-sd
     ptr: example.com.
     ttl: 300
     zone: example.com.

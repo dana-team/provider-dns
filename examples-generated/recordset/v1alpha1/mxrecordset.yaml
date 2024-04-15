@@ -30,6 +30,7 @@ spec:
   forProvider:
     addresses:
     - 192.0.2.2
+    name: backup
     ttl: 300
     zone: example.com.
 
@@ -47,5 +48,6 @@ spec:
   forProvider:
     addresses:
     - 192.0.2.1
+    name: smtp
     ttl: 300
     zone: example.com.

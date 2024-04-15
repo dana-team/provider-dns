@@ -20,6 +20,10 @@ type ARecordSetInitParameters struct {
 	// +listType=set
 	Addresses []*string `json:"addresses,omitempty" tf:"addresses,omitempty"`
 
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
 	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
@@ -34,6 +38,10 @@ type ARecordSetObservation struct {
 
 	// (String) The ID of this resource.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
@@ -51,6 +59,11 @@ type ARecordSetParameters struct {
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Addresses []*string `json:"addresses,omitempty" tf:"addresses,omitempty"`
+
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.

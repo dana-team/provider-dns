@@ -19,6 +19,10 @@ type RecordInitParameters struct {
 	// The canonical name this record will point to.
 	Cname *string `json:"cname,omitempty" tf:"cname,omitempty"`
 
+	// (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+	// The name of the record. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
 	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
@@ -32,6 +36,10 @@ type RecordObservation struct {
 
 	// (String) Always set to the fully qualified domain name of the record.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+	// The name of the record. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
@@ -48,6 +56,11 @@ type RecordParameters struct {
 	// The canonical name this record will point to.
 	// +kubebuilder:validation:Optional
 	Cname *string `json:"cname,omitempty" tf:"cname,omitempty"`
+
+	// (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+	// The name of the record. The `zone` argument will be appended to this value to create the full record path.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
@@ -97,6 +110,7 @@ type Record struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.cname) || (has(self.initProvider) && has(self.initProvider.cname))",message="spec.forProvider.cname is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	Spec   RecordSpec   `json:"spec"`
 	Status RecordStatus `json:"status,omitempty"`
 }

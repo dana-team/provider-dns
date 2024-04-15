@@ -19,6 +19,10 @@ type MXRecordSetInitParameters struct {
 	// Can be specified multiple times for each MX record.
 	Mx []MxInitParameters `json:"mx,omitempty" tf:"mx,omitempty"`
 
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
 	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
@@ -32,6 +36,10 @@ type MXRecordSetObservation struct {
 	// (Block Set) Can be specified multiple times for each MX record. (see below for nested schema)
 	// Can be specified multiple times for each MX record.
 	Mx []MxObservation `json:"mx,omitempty" tf:"mx,omitempty"`
+
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
@@ -48,6 +56,11 @@ type MXRecordSetParameters struct {
 	// Can be specified multiple times for each MX record.
 	// +kubebuilder:validation:Optional
 	Mx []MxParameters `json:"mx,omitempty" tf:"mx,omitempty"`
+
+	// (String) The name of the record set. The zone argument will be appended to this value to create the full record path.
+	// The name of the record set. The `zone` argument will be appended to this value to create the full record path.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.

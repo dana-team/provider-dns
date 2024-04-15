@@ -15,6 +15,10 @@ import (
 
 type PTRInitParameters struct {
 
+	// (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+	// The name of the record. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// (String) The canonical name this record will point to.
 	// The canonical name this record will point to.
 	Ptr *string `json:"ptr,omitempty" tf:"ptr,omitempty"`
@@ -28,6 +32,10 @@ type PTRObservation struct {
 
 	// (String) Always set to the fully qualified domain name of the record.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
+
+	// (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+	// The name of the record. The `zone` argument will be appended to this value to create the full record path.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (String) The canonical name this record will point to.
 	// The canonical name this record will point to.
@@ -43,6 +51,11 @@ type PTRObservation struct {
 }
 
 type PTRParameters struct {
+
+	// (String) The name of the record. The zone argument will be appended to this value to create the full record path.
+	// The name of the record. The `zone` argument will be appended to this value to create the full record path.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (String) The canonical name this record will point to.
 	// The canonical name this record will point to.

@@ -47,6 +47,11 @@ func (in *RecordInitParameters) DeepCopyInto(out *RecordInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.TTL != nil {
 		in, out := &in.TTL, &out.TTL
 		*out = new(float64)
@@ -109,6 +114,11 @@ func (in *RecordObservation) DeepCopyInto(out *RecordObservation) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.TTL != nil {
 		in, out := &in.TTL, &out.TTL
 		*out = new(float64)
@@ -136,6 +146,11 @@ func (in *RecordParameters) DeepCopyInto(out *RecordParameters) {
 	*out = *in
 	if in.Cname != nil {
 		in, out := &in.Cname, &out.Cname
+		*out = new(string)
+		**out = **in
+	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
 		*out = new(string)
 		**out = **in
 	}

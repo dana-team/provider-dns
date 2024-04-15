@@ -8,6 +8,7 @@ metadata:
   name: www
 spec:
   forProvider:
+    name: www
     nameservers:
     - a.iana-servers.net.
     - b.iana-servers.net.
