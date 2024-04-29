@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: ptrs.record.dns.crossplane.io
+  name: ptrrecords.record.dns.crossplane.io
 spec:
   group: record.dns.crossplane.io
   names:
@@ -12,18 +12,18 @@ spec:
     - crossplane
     - managed
     - dns
-    kind: PTR
-    listKind: PTRList
-    plural: ptrs
-    singular: ptr
+    kind: PTRRecord
+    listKind: PTRRecordList
+    plural: ptrrecords
+    singular: ptrrecord
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -34,7 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: PTR is the Schema for the PTRs API. Creates a PTR type DNS record.
+        description: PTRRecord is the Schema for the PTRRecords API. Creates a PTR
+          type DNS record.
         properties:
           apiVersion:
             description: |-
@@ -54,7 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: PTRSpec defines the desired state of PTR
+            description: PTRRecordSpec defines the desired state of PTRRecord
             properties:
               deletionPolicy:
                 default: Delete
@@ -297,7 +298,7 @@ spec:
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.ptr)
                 || (has(self.initProvider) && has(self.initProvider.ptr))'
           status:
-            description: PTRStatus defines the observed state of PTR.
+            description: PTRRecordStatus defines the observed state of PTRRecord.
             properties:
               atProvider:
                 properties:
@@ -342,6 +343,13 @@ spec:
                         A Message containing details about this condition's last transition from
                         one status to another, if any.
                       type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
                     reason:
                       description: A Reason for this condition's last transition from
                         one status to another.
@@ -365,6 +373,13 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
             type: object
         required:
         - spec

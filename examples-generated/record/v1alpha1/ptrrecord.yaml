@@ -1,8 +1,8 @@
 apiVersion: record.dns.crossplane.io/v1alpha1
-kind: PTR
+kind: PTRRecord
 metadata:
   annotations:
-    meta.upbound.io/example-id: record/v1alpha1/ptr
+    meta.upbound.io/example-id: record/v1alpha1/ptrrecord
   labels:
     testing.upbound.io/example-name: dns-sd
   name: dns-sd

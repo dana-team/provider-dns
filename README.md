@@ -58,7 +58,7 @@ kind: Provider
 metadata:
   name: provider-dns
 spec:
-  package: quay.io/danateamorg/provider-dns:v0.1.1
+  package: quay.io/danateamorg/provider-dns:v0.2.0
   runtimeConfigRef:
     apiVersion: pkg.crossplane.io/v1beta1
     kind: DeploymentRuntimeConfig
@@ -166,7 +166,8 @@ The following table summarizes the available resources:
 
 | Name            | apiVersion                               | Namespaced | Kind          |
 |-----------------|------------------------------------------|------------|---------------|
-| ptrs            | record.dns.crossplane.io/v1alpha1       | false      | PTR           |
+| ptrs            | record.dns.crossplane.io/v1alpha1       | false      | PTRRecord     |
+| cnamerecords    | record.dns.crossplane.io/v1alpha1       | false      | CNAMERecord   |
 | aaaarecordsets  | recordset.dns.crossplane.io/v1alpha1    | false      | AAAARecordSet |
 | arecordsets     | recordset.dns.crossplane.io/v1alpha1    | false      | ARecordSet    |
 | mxrecordsets    | recordset.dns.crossplane.io/v1alpha1    | false      | MXRecordSet   |
@@ -212,6 +213,23 @@ spec:
     ttl: 3600
     zone: crossplane.dana-dev.com.
     name: testy-test.example-sub # record will be called testy-test in subdomain example-sub
+  providerConfigRef:
+    name: default
+```
+
+### CNAMERecord
+
+```yaml
+apiVersion: record.dns.crossplane.io/v1alpha1
+kind: CNAMERecord
+metadata:
+  name: crossplane-test-caname
+spec:
+  forProvider:
+    cname: testy-test.crossplane.dana-dev.com.
+    ttl: 3600
+    zone: crossplane.dana-dev.com.
+    name: cname-testy-test
   providerConfigRef:
     name: default
 ```

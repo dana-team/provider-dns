@@ -9,9 +9,9 @@ import (
 
 	"github.com/crossplane/upjet/pkg/controller"
 
-	record "github.com/dana-team/provider-dns/internal/controller/cname/record"
 	providerconfig "github.com/dana-team/provider-dns/internal/controller/providerconfig"
-	ptr "github.com/dana-team/provider-dns/internal/controller/record/ptr"
+	cnamerecord "github.com/dana-team/provider-dns/internal/controller/record/cnamerecord"
+	ptrrecord "github.com/dana-team/provider-dns/internal/controller/record/ptrrecord"
 	aaaarecordset "github.com/dana-team/provider-dns/internal/controller/recordset/aaaarecordset"
 	arecordset "github.com/dana-team/provider-dns/internal/controller/recordset/arecordset"
 	mxrecordset "github.com/dana-team/provider-dns/internal/controller/recordset/mxrecordset"
@@ -24,9 +24,9 @@ import (
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		record.Setup,
 		providerconfig.Setup,
-		ptr.Setup,
+		cnamerecord.Setup,
+		ptrrecord.Setup,
 		aaaarecordset.Setup,
 		arecordset.Setup,
 		mxrecordset.Setup,

@@ -60,7 +60,7 @@ func (in *AAAARecordSetInitParameters) DeepCopyInto(out *AAAARecordSetInitParame
 	}
 	if in.TTL != nil {
 		in, out := &in.TTL, &out.TTL
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 }
@@ -133,7 +133,7 @@ func (in *AAAARecordSetObservation) DeepCopyInto(out *AAAARecordSetObservation) 
 	}
 	if in.TTL != nil {
 		in, out := &in.TTL, &out.TTL
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Zone != nil {
@@ -174,7 +174,7 @@ func (in *AAAARecordSetParameters) DeepCopyInto(out *AAAARecordSetParameters) {
 	}
 	if in.TTL != nil {
 		in, out := &in.TTL, &out.TTL
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Zone != nil {
@@ -277,7 +277,7 @@ func (in *ARecordSetInitParameters) DeepCopyInto(out *ARecordSetInitParameters) 
 	}
 	if in.TTL != nil {
 		in, out := &in.TTL, &out.TTL
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 }
@@ -350,7 +350,7 @@ func (in *ARecordSetObservation) DeepCopyInto(out *ARecordSetObservation) {
 	}
 	if in.TTL != nil {
 		in, out := &in.TTL, &out.TTL
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Zone != nil {
@@ -391,7 +391,7 @@ func (in *ARecordSetParameters) DeepCopyInto(out *ARecordSetParameters) {
 	}
 	if in.TTL != nil {
 		in, out := &in.TTL, &out.TTL
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Zone != nil {

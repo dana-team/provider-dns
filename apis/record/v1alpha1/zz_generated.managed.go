@@ -7,62 +7,122 @@ package v1alpha1
 
 import xpv1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 
-// GetCondition of this PTR.
-func (mg *PTR) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+// GetCondition of this CNAMERecord.
+func (mg *CNAMERecord) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)
 }
 
-// GetDeletionPolicy of this PTR.
-func (mg *PTR) GetDeletionPolicy() xpv1.DeletionPolicy {
+// GetDeletionPolicy of this CNAMERecord.
+func (mg *CNAMERecord) GetDeletionPolicy() xpv1.DeletionPolicy {
 	return mg.Spec.DeletionPolicy
 }
 
-// GetManagementPolicies of this PTR.
-func (mg *PTR) GetManagementPolicies() xpv1.ManagementPolicies {
+// GetManagementPolicies of this CNAMERecord.
+func (mg *CNAMERecord) GetManagementPolicies() xpv1.ManagementPolicies {
 	return mg.Spec.ManagementPolicies
 }
 
-// GetProviderConfigReference of this PTR.
-func (mg *PTR) GetProviderConfigReference() *xpv1.Reference {
+// GetProviderConfigReference of this CNAMERecord.
+func (mg *CNAMERecord) GetProviderConfigReference() *xpv1.Reference {
 	return mg.Spec.ProviderConfigReference
 }
 
-// GetPublishConnectionDetailsTo of this PTR.
-func (mg *PTR) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
+// GetPublishConnectionDetailsTo of this CNAMERecord.
+func (mg *CNAMERecord) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
 	return mg.Spec.PublishConnectionDetailsTo
 }
 
-// GetWriteConnectionSecretToReference of this PTR.
-func (mg *PTR) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+// GetWriteConnectionSecretToReference of this CNAMERecord.
+func (mg *CNAMERecord) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
 	return mg.Spec.WriteConnectionSecretToReference
 }
 
-// SetConditions of this PTR.
-func (mg *PTR) SetConditions(c ...xpv1.Condition) {
+// SetConditions of this CNAMERecord.
+func (mg *CNAMERecord) SetConditions(c ...xpv1.Condition) {
 	mg.Status.SetConditions(c...)
 }
 
-// SetDeletionPolicy of this PTR.
-func (mg *PTR) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+// SetDeletionPolicy of this CNAMERecord.
+func (mg *CNAMERecord) SetDeletionPolicy(r xpv1.DeletionPolicy) {
 	mg.Spec.DeletionPolicy = r
 }
 
-// SetManagementPolicies of this PTR.
-func (mg *PTR) SetManagementPolicies(r xpv1.ManagementPolicies) {
+// SetManagementPolicies of this CNAMERecord.
+func (mg *CNAMERecord) SetManagementPolicies(r xpv1.ManagementPolicies) {
 	mg.Spec.ManagementPolicies = r
 }
 
-// SetProviderConfigReference of this PTR.
-func (mg *PTR) SetProviderConfigReference(r *xpv1.Reference) {
+// SetProviderConfigReference of this CNAMERecord.
+func (mg *CNAMERecord) SetProviderConfigReference(r *xpv1.Reference) {
 	mg.Spec.ProviderConfigReference = r
 }
 
-// SetPublishConnectionDetailsTo of this PTR.
-func (mg *PTR) SetPublishConnectionDetailsTo(r *xpv1.PublishConnectionDetailsTo) {
+// SetPublishConnectionDetailsTo of this CNAMERecord.
+func (mg *CNAMERecord) SetPublishConnectionDetailsTo(r *xpv1.PublishConnectionDetailsTo) {
 	mg.Spec.PublishConnectionDetailsTo = r
 }
 
-// SetWriteConnectionSecretToReference of this PTR.
-func (mg *PTR) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+// SetWriteConnectionSecretToReference of this CNAMERecord.
+func (mg *CNAMERecord) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
+// GetCondition of this PTRRecord.
+func (mg *PTRRecord) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this PTRRecord.
+func (mg *PTRRecord) GetDeletionPolicy() xpv1.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetManagementPolicies of this PTRRecord.
+func (mg *PTRRecord) GetManagementPolicies() xpv1.ManagementPolicies {
+	return mg.Spec.ManagementPolicies
+}
+
+// GetProviderConfigReference of this PTRRecord.
+func (mg *PTRRecord) GetProviderConfigReference() *xpv1.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+// GetPublishConnectionDetailsTo of this PTRRecord.
+func (mg *PTRRecord) GetPublishConnectionDetailsTo() *xpv1.PublishConnectionDetailsTo {
+	return mg.Spec.PublishConnectionDetailsTo
+}
+
+// GetWriteConnectionSecretToReference of this PTRRecord.
+func (mg *PTRRecord) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this PTRRecord.
+func (mg *PTRRecord) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this PTRRecord.
+func (mg *PTRRecord) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetManagementPolicies of this PTRRecord.
+func (mg *PTRRecord) SetManagementPolicies(r xpv1.ManagementPolicies) {
+	mg.Spec.ManagementPolicies = r
+}
+
+// SetProviderConfigReference of this PTRRecord.
+func (mg *PTRRecord) SetProviderConfigReference(r *xpv1.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+// SetPublishConnectionDetailsTo of this PTRRecord.
+func (mg *PTRRecord) SetPublishConnectionDetailsTo(r *xpv1.PublishConnectionDetailsTo) {
+	mg.Spec.PublishConnectionDetailsTo = r
+}
+
+// SetWriteConnectionSecretToReference of this PTRRecord.
+func (mg *PTRRecord) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
 	mg.Spec.WriteConnectionSecretToReference = r
 }

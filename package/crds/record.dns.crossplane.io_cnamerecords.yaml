@@ -4,26 +4,26 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: records.cname.dns.crossplane.io
+  name: cnamerecords.record.dns.crossplane.io
 spec:
-  group: cname.dns.crossplane.io
+  group: record.dns.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - dns
-    kind: Record
-    listKind: RecordList
-    plural: records
-    singular: record
+    kind: CNAMERecord
+    listKind: CNAMERecordList
+    plural: cnamerecords
+    singular: cnamerecord
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Record is the Schema for the Records API. Creates a CNAME type
-          DNS record.
+        description: CNAMERecord is the Schema for the CNAMERecords API. Creates a
+          CNAME type DNS record.
         properties:
           apiVersion:
             description: |-
@@ -55,7 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: RecordSpec defines the desired state of Record
+            description: CNAMERecordSpec defines the desired state of CNAMERecord
             properties:
               deletionPolicy:
                 default: Delete
@@ -302,7 +302,7 @@ spec:
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
                 || (has(self.initProvider) && has(self.initProvider.name))'
           status:
-            description: RecordStatus defines the observed state of Record.
+            description: CNAMERecordStatus defines the observed state of CNAMERecord.
             properties:
               atProvider:
                 properties:
@@ -347,6 +347,13 @@ spec:
                         A Message containing details about this condition's last transition from
                         one status to another, if any.
                       type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
                     reason:
                       description: A Reason for this condition's last transition from
                         one status to another.
@@ -370,6 +377,13 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
             type: object
         required:
         - spec

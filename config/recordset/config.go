@@ -21,12 +21,6 @@ func Configure(p *config.Provider) {
 		r.Version = apiVersion
 	})
 
-	p.AddResourceConfigurator("dns_cname_record_set", func(r *config.Resource) {
-		r.ShortGroup = shortGroup
-		r.Kind = "CNAMERecordSet"
-		r.Version = apiVersion
-	})
-
 	p.AddResourceConfigurator("dns_mx_record_set", func(r *config.Resource) {
 		r.ShortGroup = shortGroup
 		r.Kind = "MXRecordSet"

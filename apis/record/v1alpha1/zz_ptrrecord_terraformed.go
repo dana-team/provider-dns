@@ -14,18 +14,18 @@ import (
 	"github.com/crossplane/upjet/pkg/resource/json"
 )
 
-// GetTerraformResourceType returns Terraform resource type for this PTR
-func (mg *PTR) GetTerraformResourceType() string {
+// GetTerraformResourceType returns Terraform resource type for this PTRRecord
+func (mg *PTRRecord) GetTerraformResourceType() string {
 	return "dns_ptr_record"
 }
 
-// GetConnectionDetailsMapping for this PTR
-func (tr *PTR) GetConnectionDetailsMapping() map[string]string {
+// GetConnectionDetailsMapping for this PTRRecord
+func (tr *PTRRecord) GetConnectionDetailsMapping() map[string]string {
 	return nil
 }
 
-// GetObservation of this PTR
-func (tr *PTR) GetObservation() (map[string]any, error) {
+// GetObservation of this PTRRecord
+func (tr *PTRRecord) GetObservation() (map[string]any, error) {
 	o, err := json.TFParser.Marshal(tr.Status.AtProvider)
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func (tr *PTR) GetObservation() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(o, &base)
 }
 
-// SetObservation for this PTR
-func (tr *PTR) SetObservation(obs map[string]any) error {
+// SetObservation for this PTRRecord
+func (tr *PTRRecord) SetObservation(obs map[string]any) error {
 	p, err := json.TFParser.Marshal(obs)
 	if err != nil {
 		return err
@@ -43,16 +43,16 @@ func (tr *PTR) SetObservation(obs map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Status.AtProvider)
 }
 
-// GetID returns ID of underlying Terraform resource of this PTR
-func (tr *PTR) GetID() string {
+// GetID returns ID of underlying Terraform resource of this PTRRecord
+func (tr *PTRRecord) GetID() string {
 	if tr.Status.AtProvider.ID == nil {
 		return ""
 	}
 	return *tr.Status.AtProvider.ID
 }
 
-// GetParameters of this PTR
-func (tr *PTR) GetParameters() (map[string]any, error) {
+// GetParameters of this PTRRecord
+func (tr *PTRRecord) GetParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.ForProvider)
 	if err != nil {
 		return nil, err
@@ -61,8 +61,8 @@ func (tr *PTR) GetParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// SetParameters for this PTR
-func (tr *PTR) SetParameters(params map[string]any) error {
+// SetParameters for this PTRRecord
+func (tr *PTRRecord) SetParameters(params map[string]any) error {
 	p, err := json.TFParser.Marshal(params)
 	if err != nil {
 		return err
@@ -70,8 +70,8 @@ func (tr *PTR) SetParameters(params map[string]any) error {
 	return json.TFParser.Unmarshal(p, &tr.Spec.ForProvider)
 }
 
-// GetInitParameters of this PTR
-func (tr *PTR) GetInitParameters() (map[string]any, error) {
+// GetInitParameters of this PTRRecord
+func (tr *PTRRecord) GetInitParameters() (map[string]any, error) {
 	p, err := json.TFParser.Marshal(tr.Spec.InitProvider)
 	if err != nil {
 		return nil, err
@@ -80,8 +80,8 @@ func (tr *PTR) GetInitParameters() (map[string]any, error) {
 	return base, json.TFParser.Unmarshal(p, &base)
 }
 
-// GetInitParameters of this PTR
-func (tr *PTR) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
+// GetInitParameters of this PTRRecord
+func (tr *PTRRecord) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any, error) {
 	params, err := tr.GetParameters()
 	if err != nil {
 		return nil, errors.Wrapf(err, "cannot get parameters for resource '%q'", tr.GetName())
@@ -110,10 +110,10 @@ func (tr *PTR) GetMergedParameters(shouldMergeInitProvider bool) (map[string]any
 	return params, nil
 }
 
-// LateInitialize this PTR using its observed tfState.
+// LateInitialize this PTRRecord using its observed tfState.
 // returns True if there are any spec changes for the resource.
-func (tr *PTR) LateInitialize(attrs []byte) (bool, error) {
-	params := &PTRParameters{}
+func (tr *PTRRecord) LateInitialize(attrs []byte) (bool, error) {
+	params := &PTRRecordParameters{}
 	if err := json.TFParser.Unmarshal(attrs, params); err != nil {
 		return false, errors.Wrap(err, "failed to unmarshal Terraform state parameters for late-initialization")
 	}
@@ -124,6 +124,6 @@ func (tr *PTR) LateInitialize(attrs []byte) (bool, error) {
 }
 
 // GetTerraformSchemaVersion returns the associated Terraform schema version
-func (tr *PTR) GetTerraformSchemaVersion() int {
+func (tr *PTRRecord) GetTerraformSchemaVersion() int {
 	return 0
 }

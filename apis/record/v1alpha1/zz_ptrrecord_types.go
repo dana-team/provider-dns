@@ -13,7 +13,7 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type PTRInitParameters struct {
+type PTRRecordInitParameters struct {
 
 	// (String) The name of the record. The zone argument will be appended to this value to create the full record path.
 	// The name of the record. The `zone` argument will be appended to this value to create the full record path.
@@ -28,7 +28,7 @@ type PTRInitParameters struct {
 	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
 }
 
-type PTRObservation struct {
+type PTRRecordObservation struct {
 
 	// (String) Always set to the fully qualified domain name of the record.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
@@ -50,7 +50,7 @@ type PTRObservation struct {
 	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
 }
 
-type PTRParameters struct {
+type PTRRecordParameters struct {
 
 	// (String) The name of the record. The zone argument will be appended to this value to create the full record path.
 	// The name of the record. The `zone` argument will be appended to this value to create the full record path.
@@ -73,10 +73,10 @@ type PTRParameters struct {
 	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
-// PTRSpec defines the desired state of PTR
-type PTRSpec struct {
+// PTRRecordSpec defines the desired state of PTRRecord
+type PTRRecordSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     PTRParameters `json:"forProvider"`
+	ForProvider     PTRRecordParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -87,50 +87,50 @@ type PTRSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider PTRInitParameters `json:"initProvider,omitempty"`
+	InitProvider PTRRecordInitParameters `json:"initProvider,omitempty"`
 }
 
-// PTRStatus defines the observed state of PTR.
-type PTRStatus struct {
+// PTRRecordStatus defines the observed state of PTRRecord.
+type PTRRecordStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        PTRObservation `json:"atProvider,omitempty"`
+	AtProvider        PTRRecordObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// PTR is the Schema for the PTRs API. Creates a PTR type DNS record.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
+// PTRRecord is the Schema for the PTRRecords API. Creates a PTR type DNS record.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,dns}
-type PTR struct {
+type PTRRecord struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.ptr) || (has(self.initProvider) && has(self.initProvider.ptr))",message="spec.forProvider.ptr is a required parameter"
-	Spec   PTRSpec   `json:"spec"`
-	Status PTRStatus `json:"status,omitempty"`
+	Spec   PTRRecordSpec   `json:"spec"`
+	Status PTRRecordStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// PTRList contains a list of PTRs
-type PTRList struct {
+// PTRRecordList contains a list of PTRRecords
+type PTRRecordList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []PTR `json:"items"`
+	Items           []PTRRecord `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	PTR_Kind             = "PTR"
-	PTR_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: PTR_Kind}.String()
-	PTR_KindAPIVersion   = PTR_Kind + "." + CRDGroupVersion.String()
-	PTR_GroupVersionKind = CRDGroupVersion.WithKind(PTR_Kind)
+	PTRRecord_Kind             = "PTRRecord"
+	PTRRecord_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: PTRRecord_Kind}.String()
+	PTRRecord_KindAPIVersion   = PTRRecord_Kind + "." + CRDGroupVersion.String()
+	PTRRecord_GroupVersionKind = CRDGroupVersion.WithKind(PTRRecord_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&PTR{}, &PTRList{})
+	SchemeBuilder.Register(&PTRRecord{}, &PTRRecordList{})
 }

@@ -13,7 +13,7 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type RecordInitParameters struct {
+type CNAMERecordInitParameters struct {
 
 	// (String) The canonical name this record will point to.
 	// The canonical name this record will point to.
@@ -28,7 +28,7 @@ type RecordInitParameters struct {
 	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
 }
 
-type RecordObservation struct {
+type CNAMERecordObservation struct {
 
 	// (String) The canonical name this record will point to.
 	// The canonical name this record will point to.
@@ -50,7 +50,7 @@ type RecordObservation struct {
 	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
 }
 
-type RecordParameters struct {
+type CNAMERecordParameters struct {
 
 	// (String) The canonical name this record will point to.
 	// The canonical name this record will point to.
@@ -73,10 +73,10 @@ type RecordParameters struct {
 	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
-// RecordSpec defines the desired state of Record
-type RecordSpec struct {
+// CNAMERecordSpec defines the desired state of CNAMERecord
+type CNAMERecordSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     RecordParameters `json:"forProvider"`
+	ForProvider     CNAMERecordParameters `json:"forProvider"`
 	// THIS IS A BETA FIELD. It will be honored
 	// unless the Management Policies feature flag is disabled.
 	// InitProvider holds the same fields as ForProvider, with the exception
@@ -87,51 +87,51 @@ type RecordSpec struct {
 	// required on creation, but we do not desire to update them after creation,
 	// for example because of an external controller is managing them, like an
 	// autoscaler.
-	InitProvider RecordInitParameters `json:"initProvider,omitempty"`
+	InitProvider CNAMERecordInitParameters `json:"initProvider,omitempty"`
 }
 
-// RecordStatus defines the observed state of Record.
-type RecordStatus struct {
+// CNAMERecordStatus defines the observed state of CNAMERecord.
+type CNAMERecordStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        RecordObservation `json:"atProvider,omitempty"`
+	AtProvider        CNAMERecordObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// Record is the Schema for the Records API. Creates a CNAME type DNS record.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
+// CNAMERecord is the Schema for the CNAMERecords API. Creates a CNAME type DNS record.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,dns}
-type Record struct {
+type CNAMERecord struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.cname) || (has(self.initProvider) && has(self.initProvider.cname))",message="spec.forProvider.cname is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	Spec   RecordSpec   `json:"spec"`
-	Status RecordStatus `json:"status,omitempty"`
+	Spec   CNAMERecordSpec   `json:"spec"`
+	Status CNAMERecordStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// RecordList contains a list of Records
-type RecordList struct {
+// CNAMERecordList contains a list of CNAMERecords
+type CNAMERecordList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Record `json:"items"`
+	Items           []CNAMERecord `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	Record_Kind             = "Record"
-	Record_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: Record_Kind}.String()
-	Record_KindAPIVersion   = Record_Kind + "." + CRDGroupVersion.String()
-	Record_GroupVersionKind = CRDGroupVersion.WithKind(Record_Kind)
+	CNAMERecord_Kind             = "CNAMERecord"
+	CNAMERecord_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: CNAMERecord_Kind}.String()
+	CNAMERecord_KindAPIVersion   = CNAMERecord_Kind + "." + CRDGroupVersion.String()
+	CNAMERecord_GroupVersionKind = CRDGroupVersion.WithKind(CNAMERecord_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&Record{}, &RecordList{})
+	SchemeBuilder.Register(&CNAMERecord{}, &CNAMERecordList{})
 }

@@ -26,7 +26,7 @@ type ARecordSetInitParameters struct {
 
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
-	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
+	TTL *int64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
 }
 
 type ARecordSetObservation struct {
@@ -45,7 +45,7 @@ type ARecordSetObservation struct {
 
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
-	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
+	TTL *int64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
 
 	// (String) DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
 	// DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
@@ -68,7 +68,7 @@ type ARecordSetParameters struct {
 	// (Number) The TTL of the record set. Defaults to 3600.
 	// The TTL of the record set. Defaults to `3600`.
 	// +kubebuilder:validation:Optional
-	TTL *float64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
+	TTL *int64 `json:"ttl,omitempty" tf:"ttl,omitempty"`
 
 	// (String) DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
 	// DNS zone the record set belongs to. It must be an FQDN, that is, include the trailing dot.
@@ -104,8 +104,8 @@ type ARecordSetStatus struct {
 // +kubebuilder:storageversion
 
 // ARecordSet is the Schema for the ARecordSets API. Creates an A type DNS record set.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,dns}

@@ -7,8 +7,17 @@ package v1alpha1
 
 import resource "github.com/crossplane/crossplane-runtime/pkg/resource"
 
-// GetItems of this PTRList.
-func (l *PTRList) GetItems() []resource.Managed {
+// GetItems of this CNAMERecordList.
+func (l *CNAMERecordList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this PTRRecordList.
+func (l *PTRRecordList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

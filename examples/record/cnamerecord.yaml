@@ -1,0 +1,12 @@
+apiVersion: record.dns.crossplane.io/v1alpha1
+kind: CNAMERecord
+metadata:
+  name: crossplane-test-caname
+spec:
+  forProvider:
+    cname: testy-test.crossplane.dana-dev.com.
+    ttl: 3600
+    zone: crossplane.dana-dev.com.
+    name: cname-testy-test
+  providerConfigRef:
+    name: default
