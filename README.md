@@ -58,7 +58,7 @@ kind: Provider
 metadata:
   name: provider-dns
 spec:
-  package: quay.io/danateamorg/provider-dns:v0.2.0
+  package: quay.io/danateamorg/provider-dns:v0.2.1
   runtimeConfigRef:
     apiVersion: pkg.crossplane.io/v1beta1
     kind: DeploymentRuntimeConfig
