@@ -6,7 +6,8 @@ package config
 
 import (
 	"context"
-	_ "embed"
+
+	_ "embed" // needed for upjet
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 	"github.com/crossplane/upjet/pkg/registry/reference"
