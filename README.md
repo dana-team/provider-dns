@@ -50,7 +50,7 @@ includedir /etc/krb5.conf.d/
  dana-dev.com = DANA-DEV.COM
 ```
 
-### Intsall the provider
+### Install the provider
 
 ```yaml
 apiVersion: pkg.crossplane.io/v1
@@ -58,7 +58,7 @@ kind: Provider
 metadata:
   name: provider-dns
 spec:
-  package: quay.io/danateamorg/provider-dns:v0.2.1
+  package: ghcr.io/dana-team/provider-dns:<release>
   runtimeConfigRef:
     apiVersion: pkg.crossplane.io/v1beta1
     kind: DeploymentRuntimeConfig
@@ -234,30 +234,4 @@ spec:
     name: default
 ```
 
-For details on how to configure the rest of the resources, use `kubectl explain` to see the available `spec` options, and advise with the the Terraform [provider-dns](https://registry.terraform.io/providers/hashicorp/dns/latest/docs) docs.
-
-## Developing
-
-Run code-generation pipeline:
-
-```bash
-$ go run cmd/generator/main.go "$PWD"
-```
-
-Run against a Kubernetes cluster:
-
-```bash
-$ make run
-```
-
-Build, push, and install:
-
-```bash
-$ make all
-```
-
-Build binary:
-
-```bash
-$ make build
-```
+For details on how to configure the rest of the resources, use `kubectl explain` to see the available `spec` options, and advise with the Terraform [provider-dns](https://registry.terraform.io/providers/hashicorp/dns/latest/docs) docs.
