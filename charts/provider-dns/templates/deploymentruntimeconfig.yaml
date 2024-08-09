@@ -1,0 +1,39 @@
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: {{ .Values.deploymentRuntimeConfig.name }}
+  labels:
+    {{- include "provider-dns.labels" . | nindent 4 }}
+spec:
+  deploymentTemplate:
+    spec:
+      selector:
+        matchLabels:
+          pkg.crossplane.io/provider: {{ .Values.provider.name }}
+      template:
+        spec:
+          containers:
+            - name: {{ .Values.deploymentRuntimeConfig.container.name }}
+              args:
+              {{- range .Values.deploymentRuntimeConfig.container.args }}
+              - {{ . }}
+              {{- end }}
+              volumeMounts:
+                - mountPath: {{ .Values.deploymentRuntimeConfig.container.volumeMounts.mountPath }}
+                  name: {{ .Values.deploymentRuntimeConfig.container.volumeMounts.name }}
+                  readOnly: {{ .Values.deploymentRuntimeConfig.container.volumeMounts.readOnly }}
+                  subPath: {{ .Values.deploymentRuntimeConfig.container.volumeMounts.subPath }}
+          volumes:
+            - configMap:
+                name: {{ .Values.deploymentRuntimeConfig.volumes.configMap.name }}
+              name: {{ .Values.deploymentRuntimeConfig.volumes.name }}
+          {{- if .Values.deploymentRuntimeConfig.dnsPolicy }}
+          dnsPolicy: {{ .Values.deploymentRuntimeConfig.dnsPolicy }}
+          {{- end }}
+          {{- if and (eq .Values.deploymentRuntimeConfig.dnsPolicy "None") .Values.deploymentRuntimeConfig.dnsConfig.nameservers }}
+          dnsConfig:
+            nameservers:
+            {{- range .Values.deploymentRuntimeConfig.dnsConfig.nameservers }}
+            - {{ . }}
+            {{- end }}
+          {{- end }}

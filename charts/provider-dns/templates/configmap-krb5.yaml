@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.krb5Config.name }}
+  labels:
+    {{- include "provider-dns.labels" . | nindent 4 }}
+data:
+  krb5.conf: |
+    [libdefaults]
+        default_realm = {{ .Values.realm.name }}
+
+    [realms]
+     {{ .Values.realm.name }} = {
+         kdc = {{ .Values.realm.kdc }}
+         admin_server = {{ .Values.realm.kdc }}
+     }
+
+    [domain_realm]
+     .{{ .Values.realm.name | lower }} = {{ .Values.realm.name }}
+     {{ .Values.realm.name | lower }} = {{ .Values.realm.name }}

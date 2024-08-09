@@ -1,0 +1,77 @@
+# Default values for provider-dns.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  # -- The repository of the provider container image.
+  repository: ghcr.io/dana-team/provider-dns
+  # -- The tag of the manager container image.
+  tag: ""
+
+# Override the name of the deployment
+nameOverride: ""
+
+# Override the full name of the deployment
+fullnameOverride: ""
+
+provider:
+  # -- Name of the provider
+  name: provider-dns
+  runtimeConfigRef:
+    # -- Name of the DeploymentRuntimeConfig object to use
+    name: dns-config
+
+realm:
+  # -- Name of the Kerberos Realm
+  name: DANA-DEV.COM
+  # -- Name of the Kerberos Key Distribution Center server
+  kdc: dana-wdc-1.dana-dev.com
+
+krb5Config:
+  # -- Name of the configMap which contains Kerberos configuration
+  name: krb5-config
+
+# -- Configuration to be added to the provider deployment via the DeploymentRuntimeConfig resource
+deploymentRuntimeConfig:
+  name: dns-config
+  container:
+    args:
+    - --debug
+    name: package-runtime
+    volumeMounts:
+      mountPath: /etc/krb5.conf
+      name: krb5-config
+      readOnly: true
+      subPath: krb5.conf
+  volumes:
+    configMap:
+      name: krb5-config
+    name: krb5-config
+  # -- Optional DNS fields for local development
+  dnsPolicy: "ClusterFirst"
+  dnsConfig:
+    nameservers:
+      - 8.8.8.8
+
+# -- Provider authentication configuration
+providerConfig:
+  name: dns-default
+  credentials:
+    source: Secret
+    secretRef:
+      name: dns-creds
+      namespace: crossplane-system
+      key: credentials
+
+# -- Secret values for the provider authentication.
+secret:
+  # -- Name of the secret.
+  name: dns-creds
+  # -- Type of the secret.
+  type: Opaque
+  # -- RFC authentication (3645 for GSS-TSIG; 2845 for secret key based transaction).
+  rfc: 3645
+  # -- Username to connect to authenticate with.
+  username: dana
+  # -- Password to connect to authenticate with.
+  password: passw0rd
