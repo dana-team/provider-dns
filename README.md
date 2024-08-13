@@ -7,7 +7,17 @@ DNS API.
 
 ## Getting Started
 
-### Set Up
+### Install with Helm
+
+Helm chart docs are available on `charts/provider-dns`. 
+
+```
+$ helm upgrade --install provider-dns --namespace crossplane-system --create-namespace oci://ghcr.io/dana-team/helm-charts/provider-dns --version <release>
+```
+
+### Install Manually
+
+#### Set Up
 
 First, create a `ConfigMap` which includes the content of the relevant `krb5.conf` file. This `ConfigMap` then needs to be mounted to the provider pod.
 
@@ -18,31 +28,13 @@ $ kubectl create configmap krb5-config --from-file=krb5.conf=/etc/krb5.conf -n c
 The `krb5.conf` file should look something like this:
 
 ```ini
-# To opt out of the system crypto-policies configuration of krb5, remove the
-# symlink at /etc/krb5.conf.d/crypto-policies which will not be recreated.
-includedir /etc/krb5.conf.d/
-
-[logging]
-    default = FILE:/var/log/krb5libs.log
-    kdc = FILE:/var/log/krb5kdc.log
-    admin_server = FILE:/var/log/kadmind.log
-
 [libdefaults]
-    dns_lookup_realm = false
-    ticket_lifetime = 24h
-    renew_lifetime = 7d
-    forwardable = true
-    rdns = false
-    pkinit_anchors = FILE:/etc/pki/tls/certs/ca-bundle.crt
-    spake_preauth_groups = edwards25519
     default_realm = DANA-DEV.COM
-    default_ccache_name = KEYRING:persistent:%{uid}
 
 [realms]
  DANA-DEV.COM = {
      kdc = dana-wdc-1.dana-dev.com
      admin_server = dana-wdc-1.dana-dev.com
-     default_domain = dana-dev.com
  }
 
 [domain_realm]
@@ -50,7 +42,7 @@ includedir /etc/krb5.conf.d/
  dana-dev.com = DANA-DEV.COM
 ```
 
-### Install the provider
+#### Install the provider
 
 ```yaml
 apiVersion: pkg.crossplane.io/v1
@@ -166,14 +158,14 @@ The following table summarizes the available resources:
 
 | Name            | apiVersion                               | Namespaced | Kind          |
 |-----------------|------------------------------------------|------------|---------------|
-| ptrs            | record.dns.crossplane.io/v1alpha1       | false      | PTRRecord     |
-| cnamerecords    | record.dns.crossplane.io/v1alpha1       | false      | CNAMERecord   |
-| aaaarecordsets  | recordset.dns.crossplane.io/v1alpha1    | false      | AAAARecordSet |
-| arecordsets     | recordset.dns.crossplane.io/v1alpha1    | false      | ARecordSet    |
-| mxrecordsets    | recordset.dns.crossplane.io/v1alpha1    | false      | MXRecordSet   |
-| nsrecordsets    | recordset.dns.crossplane.io/v1alpha1    | false      | NSRecordSet   |
-| srvrecordsets   | recordset.dns.crossplane.io/v1alpha1    | false      | SRVRecordSet  |
-| txtrecordsets   | recordset.dns.crossplane.io/v1alpha1    | false      | TXTRecordSet  |
+| `ptrs`           | `record.dns.crossplane.io/v1alpha1`       | false      | `PTRRecord`     |
+| `cnamerecords`   | `record.dns.crossplane.io/v1alpha1`       | false      | `CNAMERecord`   |
+| `aaaarecordsets` | `recordset.dns.crossplane.io/v1alpha1`    | false      | `AAAARecordSet` |
+| `arecordsets`     | `recordset.dns.crossplane.io/v1alpha1`    | false      | `ARecordSet`    |
+| `mxrecordsets`    | `recordset.dns.crossplane.io/v1alpha1`    | false      | `MXRecordSet`   |
+| `nsrecordsets`    | `recordset.dns.crossplane.io/v1alpha1`    | false      | `NSRecordSet`   |
+| `srvrecordsets`   | `recordset.dns.crossplane.io/v1alpha1`    | false      | `SRVRecordSet`  |
+| `txtrecordsets`   | `recordset.dns.crossplane.io/v1alpha1`    | false      | `TXTRecordSet`  |
 
 ## Examples
 
